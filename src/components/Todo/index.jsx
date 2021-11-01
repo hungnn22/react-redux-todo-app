@@ -21,6 +21,10 @@ const Todo = ({ todo }) => {
         dispatch(toggleTodo(todo))
     }
 
+    useEffect(() => {
+        console.log('TODO');
+    }, [])
+
     const handleDelete = () => {
         Toast('error', '👌 Deleted!')
         dispatch(deleteTodo(todo.id))

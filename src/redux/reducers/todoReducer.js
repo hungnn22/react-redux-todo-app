@@ -2,27 +2,10 @@ import faker from "faker"
 import * as types from "redux/constants/actionTypes"
 
 const initialState = {
-    list: [
-        {
-            "task": "Wake up",
-            "completed": false,
-            "createAt": 1635694920,
-            "id": "1"
-        },
-        {
-            "task": "Drink Coffe",
-            "completed": false,
-            "createAt": 1635694860,
-            "id": "2"
-        },
-        {
-            "task": "Wash",
-            "completed": false,
-            "createAt": 1635694800,
-            "id": "3"
-        },
-    ],
-    editTodo: null
+    list: [],
+    loading: false,
+    error: null,
+    editTodo: null,
 }
 
 const todoReducer = (state = initialState, action) => {
@@ -62,16 +45,46 @@ const todoReducer = (state = initialState, action) => {
         }
 
         case types.DELETE_TODO:
+            const newList = [...state.list]
             return {
                 ...state,
-                list: state.list.filter(item => (item.id !== action.payload)),
-                editTodo: null
+                list: newList.filter(item => (item.id !== action.payload))
             }
 
         case types.IS_EDIT_TODO: {
             return {
                 ...state,
                 editTodo: action.payload
+            }
+        }
+
+        case types.GET_TODOS: {
+            return {
+                ...state,
+                loading: false,
+                list: action.payload
+            }
+        }
+
+        case types.FETCH_TODOS: {
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        }
+        case types.FETCH_TODOS_SUCCESS: {
+            return {
+                ...state,
+                loading: false,
+                list: action.payload
+            }
+        }
+        case types.FETCH_TODOS_FAILED: {
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
             }
         }
         default: return state
